@@ -11,7 +11,7 @@ router.get('/:id', todoController.getOne)
 
 router.post('/', todoController.create)
 
-// router.put('/:id', todoController.update)
+router.put('/:id', todoController.update)
 
 // router.delete('/:id', todoController.delete)
 
