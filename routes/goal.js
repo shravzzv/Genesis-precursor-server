@@ -11,4 +11,6 @@ router.get('/:id', goalController.getOne)
 
 router.post('/', goalController.create)
 
+router.put('/:id', goalController.update)
+
 module.exports = router

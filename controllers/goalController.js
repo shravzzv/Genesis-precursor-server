@@ -42,3 +42,40 @@ exports.create = [
     }
   }),
 ]
+
+exports.update = [
+  body('name')
+    .trim()
+    .notEmpty()
+    .withMessage('Name must not be empty.')
+    .escape(),
+
+  asyncHandler(async (req, res) => {
+    const errors = validationResult(req)
+    const { name } = matchedData(req, {
+      onlyValidData: false,
+    })
+
+    const currentGoal = await Goal.findById(req.params.id)
+
+    if (currentGoal.user.toString() !== req.user.id) {
+      res
+        .status(403)
+        .json({ message: 'You do not have permission to update this goal.' })
+    }
+
+    if (errors.isEmpty()) {
+      const updatedGoal = await Goal.findByIdAndUpdate(
+        req.params.id,
+        { name },
+        {
+          new: true,
+        }
+      )
+
+      res.json(updatedGoal)
+    } else {
+      res.status(401).json(errors.array())
+    }
+  }),
+]
