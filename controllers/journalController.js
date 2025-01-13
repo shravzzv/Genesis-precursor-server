@@ -96,3 +96,21 @@ exports.update = [
     }
   }),
 ]
+
+exports.delete = asyncHandler(async (req, res) => {
+  const journal = await Journal.findById(req.params.id)
+
+  if (!journal) {
+    return res.status(404).json({ message: 'Journal not found.' })
+  }
+
+  if (journal.user.toString() !== req.user.id) {
+    return res
+      .status(403)
+      .json({ message: 'You do not have permission to delete this journal.' })
+  }
+
+  await Journal.findByIdAndDelete(req.params.id)
+
+  res.json({ message: 'Journal deleted.' })
+})

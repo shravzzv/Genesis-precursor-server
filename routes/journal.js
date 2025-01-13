@@ -13,6 +13,6 @@ router.post('/', journalController.create)
 
 router.put('/:id', journalController.update)
 
-// router.delete('/:id', journalController.delete)
+router.delete('/:id', journalController.delete)
 
 module.exports = router
