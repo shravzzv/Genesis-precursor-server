@@ -116,3 +116,21 @@ exports.update = [
     }
   }),
 ]
+
+exports.delete = asyncHandler(async (req, res) => {
+  const todo = await Todo.findById(req.params.id)
+
+  if (!todo) {
+    return res.status(404).json({ message: 'Todo not found.' })
+  }
+
+  if (todo.user.toString() !== req.user.id) {
+    res
+      .status(403)
+      .json({ message: 'You do not have permission to delete this todo.' })
+  }
+
+  await Todo.findByIdAndDelete(req.params.id)
+
+  res.json({ message: 'Todo deleted.' })
+})

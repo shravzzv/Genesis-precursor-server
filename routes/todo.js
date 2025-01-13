@@ -13,6 +13,6 @@ router.post('/', todoController.create)
 
 router.put('/:id', todoController.update)
 
-// router.delete('/:id', todoController.delete)
+router.delete('/:id', todoController.delete)
 
 module.exports = router
