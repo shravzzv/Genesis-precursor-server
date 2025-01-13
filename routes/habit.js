@@ -9,7 +9,7 @@ router.get('/', habitController.getAll)
 
 router.get('/:id', habitController.getOne)
 
-// router.post('/', habitController.create)
+router.post('/', habitController.create)
 
 // router.put('/:id', habitController.update)
 
