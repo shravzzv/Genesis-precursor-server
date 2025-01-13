@@ -9,7 +9,7 @@ router.get('/', journalController.getAll)
 
 router.get('/:id', journalController.getOne)
 
-// router.post('/', journalController.create)
+router.post('/', journalController.create)
 
 // router.put('/:id', journalController.update)
 
