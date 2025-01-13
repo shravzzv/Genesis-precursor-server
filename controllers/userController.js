@@ -57,3 +57,43 @@ exports.signup = [
     }
   }),
 ]
+
+exports.signin = [
+  body('email')
+    .trim()
+    .notEmpty()
+    .withMessage('Email must not be empty.')
+    .bail()
+    .isEmail()
+    .withMessage('Email is not a valid email address.')
+    .bail()
+    .escape()
+    .custom(async (email, { req }) => {
+      const user = await User.findOne({ email }, '_id password')
+      if (user) req.user = user
+      if (!user) throw new Error(`Email ${email} doesn't exist.`)
+    }),
+
+  body('password')
+    .trim()
+    .isLength({ min: 8 })
+    .withMessage('Password must be atleast 8 characters long.')
+    .bail()
+    .custom(async (password, { req }) => {
+      if (req.user && !(await bcrypt.compare(password, req.user.password))) {
+        throw new Error('Incorrect password.')
+      }
+    }),
+
+  asyncHandler(async (req, res) => {
+    const errors = validationResult(req)
+
+    if (errors.isEmpty()) {
+      const token = jwt.sign({ id: req.user.id }, process.env.JWT_SECRET)
+
+      res.json({ token })
+    } else {
+      res.status(401).json(errors.array())
+    }
+  }),
+]
