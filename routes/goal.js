@@ -13,4 +13,6 @@ router.post('/', goalController.create)
 
 router.put('/:id', goalController.update)
 
+router.delete('/:id', goalController.delete)
+
 module.exports = router

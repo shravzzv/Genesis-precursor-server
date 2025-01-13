@@ -79,3 +79,16 @@ exports.update = [
     }
   }),
 ]
+
+exports.delete = asyncHandler(async (req, res) => {
+  const currentGoal = await Goal.findById(req.params.id)
+
+  if (currentGoal.user.toString() !== req.user.id) {
+    res
+      .status(403)
+      .json({ message: 'You do not have permission to delete this goal.' })
+  }
+
+  await Goal.findByIdAndDelete(req.params.id)
+  res.json({ message: 'Goal deleted.' })
+})
