@@ -141,3 +141,21 @@ exports.update = [
     }
   }),
 ]
+
+exports.delete = asyncHandler(async (req, res) => {
+  const habit = await Habit.findById(req.params.id)
+
+  if (!habit) {
+    return res.status(404).json({ message: 'Habit not found.' })
+  }
+
+  if (habit.user.toString() !== req.user.id) {
+    return res
+      .status(403)
+      .json({ message: 'You do not have permission to delete this habit.' })
+  }
+
+  await Habit.findByIdAndDelete(req.params.id)
+
+  res.json({ message: 'Habit deleted.' })
+})

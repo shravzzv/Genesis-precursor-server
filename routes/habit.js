@@ -13,6 +13,6 @@ router.post('/', habitController.create)
 
 router.put('/:id', habitController.update)
 
-// router.delete('/:id', habitController.delete)
+router.delete('/:id', habitController.delete)
 
 module.exports = router
