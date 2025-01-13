@@ -16,11 +16,11 @@ const todoSchema = new Schema(
     user: {
       type: Schema.Types.ObjectId,
       ref: 'User',
+      required: true,
     },
     goal: {
       type: Schema.Types.ObjectId,
       ref: 'Goal',
-      default: null,
     },
   },
   { timestamps: true }
