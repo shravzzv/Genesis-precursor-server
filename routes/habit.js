@@ -11,7 +11,7 @@ router.get('/:id', habitController.getOne)
 
 router.post('/', habitController.create)
 
-// router.put('/:id', habitController.update)
+router.put('/:id', habitController.update)
 
 // router.delete('/:id', habitController.delete)
 
