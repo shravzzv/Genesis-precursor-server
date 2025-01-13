@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler')
 const Goal = require('../models/goal')
+const Todo = require('../models/todo')
 const { body, validationResult, matchedData } = require('express-validator')
 
 exports.getAll = asyncHandler(async (req, res) => {
@@ -96,6 +97,12 @@ exports.delete = asyncHandler(async (req, res) => {
       .status(403)
       .json({ message: 'You do not have permission to delete this goal.' })
   }
+
+  const todos = await Todo.find({ goal: req.params.id })
+
+  todos.forEach(async (todo) => {
+    await Todo.findByIdAndDelete(todo._id)
+  })
 
   await Goal.findByIdAndDelete(req.params.id)
   res.json({ message: 'Goal deleted.' })
