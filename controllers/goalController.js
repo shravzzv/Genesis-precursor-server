@@ -58,6 +58,10 @@ exports.update = [
 
     const currentGoal = await Goal.findById(req.params.id)
 
+    if (!currentGoal) {
+      return res.status(404).json({ message: 'Goal not found.' })
+    }
+
     if (currentGoal.user.toString() !== req.user.id) {
       res
         .status(403)
@@ -82,6 +86,10 @@ exports.update = [
 
 exports.delete = asyncHandler(async (req, res) => {
   const currentGoal = await Goal.findById(req.params.id)
+
+  if (!currentGoal) {
+    return res.status(404).json({ message: 'Goal not found.' })
+  }
 
   if (currentGoal.user.toString() !== req.user.id) {
     res
