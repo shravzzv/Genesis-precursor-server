@@ -7,6 +7,8 @@ router.use(protect)
 
 router.get('/', goalController.getAll)
 
+router.get('/:id', goalController.getOne)
+
 router.post('/', goalController.create)
 
 module.exports = router

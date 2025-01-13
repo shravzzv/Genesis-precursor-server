@@ -7,6 +7,15 @@ exports.getAll = asyncHandler(async (req, res) => {
   res.json(goals)
 })
 
+exports.getOne = asyncHandler(async (req, res) => {
+  const goal = await Goal.findOne({ _id: req.params.id })
+  if (goal) {
+    res.json(goal)
+  } else {
+    res.status(404).json({ message: 'Goal not found.' })
+  }
+})
+
 exports.create = [
   body('name')
     .trim()
