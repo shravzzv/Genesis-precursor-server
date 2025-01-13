@@ -50,3 +50,49 @@ exports.create = [
     }
   }),
 ]
+
+exports.update = [
+  body('subject')
+    .trim()
+    .notEmpty()
+    .withMessage('Subject must not be empty.')
+    .escape(),
+
+  body('body')
+    .trim()
+    .notEmpty()
+    .withMessage('Body must not be empty.')
+    .escape(),
+
+  asyncHandler(async (req, res) => {
+    const errors = validationResult(req)
+    const { subject, body } = matchedData(req, {
+      onlyValidData: false,
+      includeOptionals: true,
+    })
+
+    const oldJournal = await Journal.findById(req.params.id)
+
+    if (!oldJournal) {
+      return res.status(404).json({ message: 'Journal not found.' })
+    }
+
+    if (oldJournal.user.toString() !== req.user.id) {
+      return res
+        .status(403)
+        .json({ message: 'You do not have permission to update this journal.' })
+    }
+
+    if (errors.isEmpty()) {
+      const updatedJournal = await Journal.findByIdAndUpdate(
+        req.params.id,
+        { subject, body },
+        { new: true }
+      )
+
+      res.json({ updatedJournal })
+    } else {
+      res.status(401).json(errors.array())
+    }
+  }),
+]
