@@ -15,4 +15,6 @@ router.put('/:id', goalController.update)
 
 router.delete('/:id', goalController.delete)
 
+router.get('/generateTodos/:id', goalController.generateTodos)
+
 module.exports = router
