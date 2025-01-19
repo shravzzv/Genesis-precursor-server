@@ -51,7 +51,7 @@ exports.signup = [
 
       const token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET)
 
-      res.json({ token, uid: newUser.id })
+      res.json({ token })
     } else {
       res.status(401).json(errors.array())
     }
@@ -91,7 +91,7 @@ exports.signin = [
     if (errors.isEmpty()) {
       const token = jwt.sign({ id: req.user.id }, process.env.JWT_SECRET)
 
-      res.json({ token, uid: req.user.id })
+      res.json({ token })
     } else {
       res.status(401).json(errors.array())
     }
