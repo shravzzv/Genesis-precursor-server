@@ -3,7 +3,7 @@ const Habit = require('../models/habit')
 const { body, validationResult, matchedData } = require('express-validator')
 
 exports.getAll = asyncHandler(async (req, res) => {
-  const habits = await Habit.find()
+  const habits = await Habit.find({ user: req.user.id }).sort({ updatedAt: -1 })
   res.json(habits)
 })
 

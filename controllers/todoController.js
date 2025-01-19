@@ -3,7 +3,9 @@ const Todo = require('../models/todo')
 const { body, validationResult, matchedData } = require('express-validator')
 
 exports.getAll = asyncHandler(async (req, res) => {
-  const todos = await Todo.find()
+  const todos = await Todo.find({ user: req.user.id })
+    .populate('goal')
+    .sort({ deadline: 1, updatedAt: -1 })
   res.json(todos)
 })
 
@@ -26,13 +28,13 @@ exports.create = [
   body('description').trim().optional().escape(),
 
   body('deadline')
-    .optional()
-    .isDate()
-    .withMessage('Deadline should be a valid date.')
+    .notEmpty()
+    .withMessage('Deadline must not be empty')
     .toDate(),
 
   body('goal')
-    .optional()
+    .notEmpty()
+    .withMessage('Goal must not be empty.')
     .isMongoId()
     .withMessage('Goal should be a valid MongoDB ID.')
     .escape(),
@@ -54,6 +56,7 @@ exports.create = [
 
     if (errors.isEmpty()) {
       await newTodo.save()
+      await newTodo.populate('goal')
       res.json({ newTodo })
     } else {
       res.status(401).json(errors.array())
@@ -71,13 +74,14 @@ exports.update = [
   body('description').trim().optional().escape(),
 
   body('deadline')
-    .optional()
-    .isDate()
-    .withMessage('Deadline should be a valid date.')
-    .toDate(),
+    .notEmpty()
+    .withMessage('Deadline must not be empty')
+    .toDate()
+    .optional(),
 
   body('goal')
-    .optional()
+    .notEmpty()
+    .withMessage('Goal must not be empty.')
     .isMongoId()
     .withMessage('Goal should be a valid MongoDB ID.')
     .escape(),
@@ -110,6 +114,7 @@ exports.update = [
         }
       )
 
+      await updatedTodo.populate('goal')
       res.json({ updatedTodo })
     } else {
       res.status(401).json(errors.array())
