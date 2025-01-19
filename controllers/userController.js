@@ -97,3 +97,8 @@ exports.signin = [
     }
   }),
 ]
+
+exports.getUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user.id, '-password')
+  res.json(user)
+})
