@@ -3,7 +3,9 @@ const Todo = require('../models/todo')
 const { body, validationResult, matchedData } = require('express-validator')
 
 exports.getAll = asyncHandler(async (req, res) => {
-  const todos = await Todo.find({ user: req.user.id }).populate('goal')
+  const todos = await Todo.find({ user: req.user.id })
+    .populate('goal')
+    .sort({ deadline: 1, updatedAt: -1 })
   res.json(todos)
 })
 

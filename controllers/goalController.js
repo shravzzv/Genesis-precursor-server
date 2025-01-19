@@ -5,7 +5,7 @@ const { body, validationResult, matchedData } = require('express-validator')
 const { getTodos } = require('../utils/ai.utils')
 
 exports.getAll = asyncHandler(async (req, res) => {
-  const goals = await Goal.find({ user: req.user.id })
+  const goals = await Goal.find({ user: req.user.id }).sort({ updatedAt: -1 })
   res.json(goals)
 })
 
@@ -135,6 +135,7 @@ exports.generateTodos = asyncHandler(async (req, res) => {
 
     newTodos.push(newTodo)
     await newTodo.save()
+    await newTodo.populate('goal')
   })
 
   res.json({ newTodos })

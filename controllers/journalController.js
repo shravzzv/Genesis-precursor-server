@@ -3,7 +3,9 @@ const Journal = require('../models/journal')
 const { body, validationResult, matchedData } = require('express-validator')
 
 exports.getAll = asyncHandler(async (req, res) => {
-  const journals = await Journal.find()
+  const journals = await Journal.find({ user: req.user.id }).sort({
+    updatedAt: -1,
+  })
   res.json(journals)
 })
 
